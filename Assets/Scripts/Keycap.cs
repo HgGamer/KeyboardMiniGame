@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 
+    public bool fixedbutton = false;
     float snapdistance = 50;
     public string label;
     public string labelBR;
@@ -29,6 +31,7 @@ public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     // Start is called before the first frame update
     void Start()
     {
+        
         if (label == "")
         {
             transform.GetChild(1).GetComponent<TMP_Text>().fontSize = 40;
@@ -48,6 +51,11 @@ public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         transform.GetChild(3).GetComponent<TMP_Text>().text = labelTR;
         transform.GetChild(4).GetComponent<TMP_Text>().text = labelTL;
         canvas = GetComponentInParent<Canvas>();
+
+        rectTransform.localScale = rectTransform.localScale * canvas.scaleFactor;
+        if(fixedbutton){
+            this.enabled = false;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -63,7 +71,7 @@ public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        rectTransform.transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -79,7 +87,7 @@ public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
         foreach (var sw in switches)
         {
-            if (Vector3.Distance(sw.transform.position, transform.position) < snapdistance && sw.transform.childCount == 0)
+            if (Vector3.Distance(sw.transform.position, transform.position) < snapdistance* canvas.scaleFactor && sw.transform.childCount == 0)
             {
                 transform.position = sw.transform.position;
                 transform.SetParent(sw.transform,true);

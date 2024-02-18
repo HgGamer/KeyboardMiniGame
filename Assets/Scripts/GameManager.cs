@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    sw.transform.GetChild(0).GetComponent<Keycap>().fixedbutton = true;
                     sw.transform.GetChild(0).GetComponent<Image>().color = new Color(1.0f, 0.8818358f, 0.5801887f);
                 }
             }
