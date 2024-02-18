@@ -54,7 +54,7 @@ public class Keycap : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
         rectTransform.localScale = rectTransform.localScale * canvas.scaleFactor;
         if(fixedbutton){
-            this.enabled = false;
+            Destroy(this);
         }
     }
 
